@@ -1,0 +1,44 @@
+version: "3"
+services:
+  app:
+    container_name: app
+    build: ./app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app:/app
+    depends_on:
+      - database
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=/VxG5FWZlyrCAGi+96Umd7EtNVoQXrmVgOZ1KDxXLWo=
+      - MYSQL_DATABASE=zadanie
+
+  server:
+    build: ./server
+    container_name: server
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./server:/app
+    depends_on:
+      - database
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=/VxG5FWZlyrCAGi+96Umd7EtNVoQXrmVgOZ1KDxXLWo=
+      - MYSQL_DATABASE=zadanie
+
+  database:
+    image: mysql:8
+    container_name: database
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: /VxG5FWZlyrCAGi+96Umd7EtNVoQXrmVgOZ1KDxXLWo=
+      MYSQL_DATABASE: zadanie
+      MYSQL_TCP_PORT: 3307
+    ports:
+      - "3307:3307"
+    volumes:
+      - ./database:/var/lib/mysql
